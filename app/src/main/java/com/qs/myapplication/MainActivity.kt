@@ -18,6 +18,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.qs.myapplication.ui.theme.MyApplicationTheme
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 
 class MainActivity : ComponentActivity() {
     private lateinit var bluetoothService: BluetoothService
@@ -82,7 +84,7 @@ fun BluetoothScreen(bluetoothService: BluetoothService) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("蓝牙串口Demo") })
+            TopAppBar(title = { Text("STM手表2.0") })
         },
         content = { padding ->
             Column(modifier = Modifier
@@ -95,6 +97,13 @@ fun BluetoothScreen(bluetoothService: BluetoothService) {
                 Text("配对设备:")
                 LazyColumn(modifier = Modifier.weight(1f)) {
                     items(devices) { device ->
+                        val hasBluetoothConnectPermission = ContextCompat.checkSelfPermission(
+                            context,
+                            android.Manifest.permission.BLUETOOTH_CONNECT
+                        ) == PackageManager.PERMISSION_GRANTED
+
+                        val deviceName = if (hasBluetoothConnectPermission) device.name else "未知设备"
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -103,11 +112,11 @@ fun BluetoothScreen(bluetoothService: BluetoothService) {
                                     connectStatus = "正在连接..."
                                     val result = bluetoothService.connect(device)
                                     isConnected = result
-                                    connectStatus = if (result) "已连接: ${device.name}" else "连接失败"
+                                    connectStatus = if (result) "已连接: $deviceName" else "连接失败"
                                 }
                                 .padding(8.dp)
                         ) {
-                            Text(text = device.name ?: "未知设备")
+                            Text(text = deviceName)
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(text = device.address)
                         }

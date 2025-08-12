@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.qs.myapplication.ui.theme.MyApplicationTheme
 import android.content.pm.PackageManager
+import androidx.compose.ui.Alignment
 import androidx.core.content.ContextCompat
 
 class MainActivity : ComponentActivity() {
@@ -142,6 +143,76 @@ fun BluetoothScreen(bluetoothService: BluetoothService) {
                         enabled = isConnected
                     ) {
                         Text("发送")
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                // 遥控按钮区
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                if (isConnected) bluetoothService.send("F\r\n".toByteArray())
+                            },
+                            enabled = isConnected,
+                            modifier = Modifier.size(64.dp)
+                        ) {
+                            Text("前")
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                if (isConnected) bluetoothService.send("L\r\n".toByteArray())
+                            },
+                            enabled = isConnected,
+                            modifier = Modifier.size(64.dp)
+                        ) {
+                            Text("左")
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Button(
+                            onClick = {
+                                if (isConnected) bluetoothService.send("S\r\n".toByteArray())
+                            },
+                            enabled = isConnected,
+                            modifier = Modifier.size(64.dp)
+                        ) {
+                            Text("停")
+                        }
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Button(
+                            onClick = {
+                                if (isConnected) bluetoothService.send("R\r\n".toByteArray())
+                            },
+                            enabled = isConnected,
+                            modifier = Modifier.size(64.dp)
+                        ) {
+                            Text("右")
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                if (isConnected) bluetoothService.send("B\r\n".toByteArray())
+                            },
+                            enabled = isConnected,
+                            modifier = Modifier.size(64.dp)
+                        ) {
+                            Text("后")
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
